@@ -20,9 +20,24 @@ app.use((req, res, next) => {
     };
 });
 
+// Xenia game patches
 app.get('/patches', async (req, res) => {
     try {
         const response = await axios.get('https://api.github.com/repos/xenia-canary/game-patches/contents/patches', {
+            headers: {
+                Authorization: req.githubToken
+            }
+        });
+        res.json(response.data);
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to fetch patches data' });
+    }
+});
+
+// Xenia releases
+app.get('/releases', async (req, res) => {
+    try {
+        const response = await axios.get('https://api.github.com/repos/xenia-canary/xenia-canary/releases', {
             headers: {
                 Authorization: req.githubToken
             }
